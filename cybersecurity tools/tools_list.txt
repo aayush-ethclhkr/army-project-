@@ -1,0 +1,14 @@
+password strength checker
+encrypted_password_manager
+screen monitor
+log_analyzer
+key_logger
+ctf_generator
+ctf_decoder
+windows system audit script 
+list files of system 
+malware detector 
+
+
+
+
