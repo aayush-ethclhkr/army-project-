@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python Learning Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --military-green: #206020;
+      --dark-green: #154015;
+      --navy-blue: #003366;
+      --airforce-blue: #2a4b6e;
+      --sky-blue: #4d8fc9;
+      --gold: #FFD700;
+      --gold-braid: #c9a53d;
+      --alert-red: #a30000;
+      --light-gray: #f0f0f0;
+      --khaki-light: #f0e6d2;
+      --dark-gray: #333333;
+      --combat-black: #1a1a1a;
+      --sidebar-width: 280px;
+      --header-height: 80px;
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body { 
+      font-family: 'Poppins', sans-serif; 
+      background: var(--light-gray); 
+      display: flex; 
+      height: 100vh; 
+      overflow: hidden; 
+      color: var(--dark-gray);
+    }
+    
+    nav { 
+      width: var(--sidebar-width); 
+      background: var(--dark-green); 
+      color: white; 
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .nav-header { 
+      padding: 1.5rem;
+      background: var(--military-green);
+      border-bottom: 2px solid var(--gold);
+    }
+    
+    .nav-header h2 { 
+      font-size: 1.5rem; 
+      margin-bottom: 0.5rem; 
+      text-align: center; 
+      color: white;
+    }
+    
+    .nav-header p {
+      font-size: 0.8rem;
+      text-align: center;
+      color: var(--khaki-light);
+      opacity: 0.8;
+    }
+    
+    .problem-list { 
+      flex: 1; 
+      overflow-y: auto; 
+      padding: 1rem 0;
+    }
+    
+    .problem-list ul { 
+      list-style: none; 
+    }
+    
+    .problem-list li { 
+      padding: 0.8rem 1.5rem; 
+      cursor: pointer; 
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+      display: flex;
+      align-items: center;
+    }
+    
+    .problem-list li:hover { 
+      background: rgba(255,255,255,0.1); 
+      border-left: 3px solid var(--gold);
+    }
+    
+    .problem-list li.active { 
+      background: rgba(0,0,0,0.2); 
+      border-left: 3px solid var(--gold);
+    }
+    
+    .problem-list li i { 
+      margin-right: 10px; 
+      color: var(--gold); 
+      width: 20px;
+      text-align: center;
+    }
+    
+    .problem-list li span { 
+      flex: 1; 
+    }
+    
+    .problem-list li .badge { 
+      background: var(--gold); 
+      color: var(--dark-green); 
+      padding: 2px 6px; 
+      border-radius: 10px; 
+      font-size: 0.7rem; 
+      font-weight: bold;
+    }
+    
+    .content { 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      height: 100vh; 
+      overflow: hidden;
+    }
+    
+    .header { 
+      height: var(--header-height); 
+      background: white; 
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 0 2rem; 
+      z-index: 5;
+    }
+    
+    .header h1 { 
+      color: var(--navy-blue); 
+      font-size: 1.5rem; 
+      font-weight: 600;
+    }
+    
+    .score-card { 
+      background: var(--navy-blue); 
+      color: white; 
+      padding: 0.5rem 1.2rem; 
+      border-radius: 30px; 
+      display: flex; 
+      align-items: center;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+    
+    .score-card i { 
+      color: var(--gold); 
+      margin-right: 8px; 
+      font-size: 1.2rem;
+    }
+    
+    .main-content { 
+      flex: 1; 
+      overflow-y: auto; 
+      padding: 2rem; 
+      display: flex; 
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .question-box { 
+      background: white; 
+      padding: 1.5rem; 
+      border-radius: 8px; 
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      border-top: 3px solid var(--navy-blue);
+    }
+    
+    .question-box h2 { 
+      color: var(--navy-blue); 
+      margin-bottom: 1rem; 
+      display: flex; 
+      align-items: center;
+    }
+    
+    .question-box h2 i { 
+      margin-right: 10px; 
+      color: var(--gold);
+    }
+    
+    .question-box p { 
+      line-height: 1.6; 
+      margin-bottom: 1.5rem;
+    }
+    
+    .solution-btn { 
+      background: var(--navy-blue); 
+      color: white; 
+      border: none; 
+      padding: 0.6rem 1.2rem; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      font-weight: 500; 
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .solution-btn i { 
+      margin-right: 8px;
+    }
+    
+    .solution-btn:hover { 
+      background: var(--airforce-blue); 
+      transform: translateY(-2px);
+    }
+    
+    .solution { 
+      margin-top: 1.5rem; 
+      background: var(--khaki-light); 
+      padding: 1rem; 
+      border-radius: 5px; 
+      border-left: 3px solid var(--gold); 
+      display: none;
+    }
+    
+    .solution pre { 
+      white-space: pre-wrap; 
+      font-family: 'Courier New', monospace; 
+      color: var(--dark-gray);
+    }
+    
+    .code-editor { 
+      flex: 1; 
+      background: white; 
+      border-radius: 8px; 
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      display: flex; 
+      flex-direction: column;
+      border-top: 3px solid var(--military-green);
+    }
+    
+    .editor-header { 
+      padding: 1rem 1.5rem; 
+      background: var(--combat-black); 
+      color: white; 
+      border-radius: 8px 8px 0 0; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+    }
+    
+    .editor-header h3 { 
+      font-size: 1rem; 
+      display: flex; 
+      align-items: center;
+    }
+    
+    .editor-header h3 i { 
+      color: var(--gold); 
+      margin-right: 8px;
+    }
+    
+    .run-btn { 
+      background: var(--gold); 
+      color: var(--dark-green); 
+      border: none; 
+      padding: 0.5rem 1.2rem; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      font-weight: 600; 
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .run-btn i { 
+      margin-right: 8px;
+    }
+    
+    .run-btn:hover { 
+      background: var(--gold-braid); 
+      transform: translateY(-2px);
+    }
+    
+    textarea { 
+      flex: 1; 
+      padding: 1rem; 
+      font-family: 'Courier New', monospace; 
+      font-size: 0.95rem; 
+      border: none; 
+      resize: none; 
+      outline: none; 
+      background: var(--combat-black); 
+      color: #7fdb7f;
+      line-height: 1.5;
+    }
+    
+    .input-area { 
+      padding: 0.8rem 1rem; 
+      background: var(--dark-gray); 
+      border-radius: 0 0 8px 8px;
+    }
+    
+    .input-area label { 
+      display: block; 
+      color: white; 
+      margin-bottom: 0.5rem; 
+      font-size: 0.9rem;
+    }
+    
+    .input-area input { 
+      width: 100%; 
+      padding: 0.6rem; 
+      border-radius: 4px; 
+      border: none; 
+      font-family: 'Courier New', monospace;
+    }
+    
+    .output-container { 
+      background: white; 
+      border-radius: 8px; 
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      border-top: 3px solid var(--sky-blue);
+    }
+    
+    .output-header { 
+      padding: 1rem 1.5rem; 
+      background: var(--airforce-blue); 
+      color: white; 
+      border-radius: 8px 8px 0 0; 
+      display: flex; 
+      align-items: center;
+    }
+    
+    .output-header h3 { 
+      font-size: 1rem; 
+      display: flex; 
+      align-items: center;
+    }
+    
+    .output-header h3 i { 
+      color: var(--gold); 
+      margin-right: 8px;
+    }
+    
+    #output { 
+      min-height: 120px; 
+      max-height: 200px; 
+      overflow-y: auto; 
+      padding: 1rem; 
+      background: var(--combat-black); 
+      color: #7fdb7f; 
+      font-family: 'Courier New', monospace; 
+      white-space: pre-wrap; 
+      border-radius: 0 0 8px 8px;
+      line-height: 1.5;
+    }
+    
+    .success-message {
+      color: var(--gold);
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+    
+    .error-message {
+      color: var(--alert-red);
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      :root {
+        --sidebar-width: 240px;
+      }
+      
+      .header h1 {
+        font-size: 1.2rem;
+      }
+      
+      .main-content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-header">
+    <h2>Cybersecurity Tools</h2>
+  </div>
+  <div class="problem-list">
+    <ul id="topics">
+      <li onclick="loadQuestion('q1')" class="active">
+        
+        <span>Password strength checker</span>
+        
+      </li>
+      <li onclick="loadQuestion('q2')">
+        <i class="fas fa-divide"></i>
+        <span>Even or Odd</span>
+        <div class="badge">Easy</div>
+      </li>
+      <li onclick="loadQuestion('q3')">
+        <i class="fas fa-check-circle"></i>
+        <span>Status Check</span>
+        <div class="badge">Easy</div>
+      </li>
+      <li onclick="loadQuestion('q4')">
+        <i class="fas fa-times"></i>
+        <span>Multiplication Table</span>
+        <div class="badge">Easy</div>
+      </li>
+      <li onclick="loadQuestion('q5')">
+        <i class="fas fa-font"></i>
+        <span>Even Index Chars</span>
+        <div class="badge">Easy</div>
+      </li>
+      <li onclick="loadQuestion('q6')">
+        <i class="fas fa-redo"></i>
+        <span>Squares While Loop</span>
+        <div class="badge">Easy</div>
+      </li>
+      <li onclick="loadQuestion('q7')">
+        <i class="fas fa-ban"></i>
+        <span>Convert Negative to Zero</span>
+        <div class="badge">Easy</div>
+      </li>
+      <li onclick="loadQuestion('q8')">
+        <i class="fas fa-cat"></i>
+        <span>Cat and Hat Count</span>
+        <div class="badge">Easy</div>
+      </li>
+      <li onclick="loadQuestion('q9')">
+        <i class="fas fa-code-branch"></i>
+        <span>Else Statement</span>
+        <div class="badge">Easy</div>
+      </li>
+      <li onclick="loadQuestion('q10')">
+       
+        <span>FizzBuzz</span>
+        <div class="badge">Medium</div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="content">
+  <div class="header">
+    <h1>Python Coding Challenge</h1>
+    <div class="score-card">
+      <i class="fas fa-medal"></i>
+      <span>Score: <span id="scoreValue">0</span></span>
+    </div>
+  </div>
+  
+  <div class="main-content">
+    <div id="questionArea" class="question-box">
+      <h2><i class="fas fa-question-circle"></i> Welcome to Python Training Camp</h2>
+      <p>Select a challenge from the sidebar to begin your Python training mission. Each completed challenge will earn you points towards your final score.</p>
+      <button class="solution-btn" onclick="showSolution()"><i class="fas fa-eye"></i> View Solution</button>
+      <div class="solution">
+        <pre id="solution"></pre>
+      </div>
+    </div>
+    
+    <div class="code-editor">
+      <div class="editor-header">
+        <h3><i class="fas fa-code"></i> Code Editor</h3>
+        <button class="run-btn" onclick="runCode()"><i class="fas fa-play"></i> Run Code</button>
+      </div>
+      <textarea id="code" placeholder="# Write your Python code here..."></textarea>
+      <div class="input-area">
+        <label for="userInput"><i class="fas fa-keyboard"></i> Input (if needed):</label>
+        <input id="userInput" type="text" placeholder="Enter input values separated by commas..." />
+      </div>
+    </div>
+    
+    <div class="output-container">
+      <div class="output-header">
+        <h3><i class="fas fa-terminal"></i> Output</h3>
+      </div>
+      <div id="output"># Your program output will appear here...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+let solutionViewed = false;
+let score = 0;
+let currentQuestion = 'q1';
+const questions = {
+  q1: {
+    title: "Password strength checker",
+    description: `.`,
+    code: `#import re
+
+def check_password_strength(password):
+    # Define the criteria for password strength
+    criteria = [
+        (len(password) >= 8, "Password should be at least 8 characters long."),
+        (re.search(r"[A-Z]", password), "Password should contain at least one uppercase letter."),
+        (re.search(r"[a-z]", password), "Password should contain at least one lowercase letter."),
+        (re.search(r"\d", password), "Password should contain at least one digit."),
+        (re.search(r"[!@#$%^&*(),.?\":{}|<>]", password), "Password should contain at least one special character."),
+    ]
+    
+    # Check the criteria
+    errors = [error for valid, error in criteria if not valid]
+    
+    if not errors:
+        return "Strong password!"
+    else:
+        return f"Weak password. Issues:\n" + "\n".join(errors)
+
+# Test the function
+if __name__ == "__main__":
+    user_password = input("Enter a password to check its strength: ")
+    result = check_password_strength(user_password)
+    print(result)
+
+
+print(f"After swapping: a = {a}, b = {b}")`,
+    solution: `a = int(input("Enter the value of a: "))
+b = int(input("Enter the value of b: "))
+print(f"Before swapping: a = {a}, b = {b}")
+
+# Python makes swapping easy!
+a, b = b, a
+
+print(f"After swapping: a = {a}, b = {b}")`
+  },
+  q2: {
+    title: "Even or Odd",
+    description: `Check if a number is even or odd. This basic challenge tests your understanding of conditional statements and arithmetic operations.`,
+    code: `# Check if number is even or odd
+n = int(input("Enter a number: "))
+
+# Your condition here
+
+
+`,
+    solution: `n = int(input("Enter a number: "))
+if n % 2 == 0:
+    print("Even")
+else:
+    print("Odd")`
+  },
+  q3: {
+    title: "Status Check",
+    description: `Check if a boolean variable is True or False and print the appropriate status message. This helps you understand boolean logic in Python.`,
+    code: `# Check boolean status
+status = True  # Try changing this to False
+
+# Your condition here
+
+
+`,
+    solution: `status = True
+if status:
+    print("Active")
+else:
+    print("Inactive")`
+  },
+  q4: {
+    title: "Multiplication Table",
+    description: `Print the multiplication table of a given number from 1 to 10. This challenge helps you practice loops and string formatting.`,
+    code: `# Print multiplication table
+n = int(input("Enter number: "))
+
+# Your loop here
+
+
+`,
+    solution: `n = int(input("Enter number: "))
+for i in range(1, 11):
+    print(f"{n} x {i} = {n*i}")`
+  },
+  q5: {
+    title: "Characters at Even Indices",
+    description: `Print characters at even indices from a string. Remember that Python uses 0-based indexing. This tests your string slicing skills.`,
+    code: `# Print even index characters
+s = input("Enter string: ")
+
+# Your slicing here
+
+
+`,
+    solution: `s = input("Enter string: ")
+print(s[::2])`
+  },
+  q6: {
+    title: "While Loop Squares",
+    description: `Print squares of numbers from 1 to 5 using a while loop. This helps you understand while loops and basic arithmetic operations.`,
+    code: `# Print squares with while loop
+i = 1
+
+# Your while loop here
+
+
+`,
+    solution: `i = 1
+while i <= 5:
+    print(i*i)
+    i += 1`
+  },
+  q7: {
+    title: "Zero Converter",
+    description: `Convert any negative number to zero while leaving positive numbers unchanged. This tests your conditional logic skills.`,
+    code: `# Convert negatives to zero
+n = int(input("Enter a number: "))
+
+# Your condition here
+
+
+print(n)`,
+    solution: `n = int(input("Enter a number: "))
+if n < 0:
+    n = 0
+print(n)`
+  },
+  q8: {
+    title: "Cat and Hat Count",
+    description: `Calculate number of hats needed for given number of cats (each cat needs 2 hats). This simple problem tests basic arithmetic.`,
+    code: `# Calculate hats for cats
+cats = 5
+
+# Your calculation here
+
+
+print("Total hats:", hats)`,
+    solution: `cats = 5
+hats = cats * 2
+print("Total hats:", hats)`
+  },
+  q9: {
+    title: "Else Statement",
+    description: `Write a program that checks if a number is positive or non-positive using if-else statement. This reinforces basic conditional logic.`,
+    code: `# Check if number is positive
+x = int(input("Enter number: "))
+
+# Your if-else here
+
+
+`,
+    solution: `x = int(input("Enter number: "))
+if x > 0:
+    print("Positive")
+else:
+    print("Non-positive")`
+  },
+  q10: {
+    title: "FizzBuzz",
+    description: `The classic FizzBuzz problem: Print numbers from 1 to 15, but for multiples of 3 print "Fizz", for multiples of 5 print "Buzz", and for multiples of both print "FizzBuzz". This tests your understanding of conditionals and loops.`,
+    code: `# FizzBuzz challenge
+for i in range(1, 16):
+    # Your conditions here
+
+
+`,
+    solution: `for i in range(1, 16):
+    if i % 3 == 0 and i % 5 == 0:
+        print("FizzBuzz")
+    elif i % 3 == 0:
+        print("Fizz")
+    elif i % 5 == 0:
+        print("Buzz")
+    else:
+        print(i)`
+  }
+};
+
+function loadQuestion(key) {
+  currentQuestion = key;
+  const q = questions[key];
+  solutionViewed = false;
+  if (!q) return;
+  
+  // Update active state in nav
+  document.querySelectorAll('#topics li').forEach(li => {
+    li.classList.remove('active');
+  });
+  event.currentTarget.classList.add('active');
+  
+  // Update question area
+  document.getElementById('questionArea').innerHTML = `
+    <h2><i class="fas fa-question-circle"></i> ${q.title}</h2>
+    <p>${q.description}</p>
+    <button class="solution-btn" onclick="showSolution()"><i class="fas fa-eye"></i> View Solution</button>
+    <div class="solution">
+      <pre id="solution"></pre>
+    </div>
+  `;
+  
+  document.getElementById('code').value = q.code;
+  document.getElementById('output').textContent = '# Your program output will appear here...';
+  document.querySelector('.solution').style.display = 'none';
+}
+
+function showSolution() {
+  solutionViewed = true;
+  const solutionElement = document.querySelector('.solution');
+  solutionElement.style.display = 'block';
+  document.getElementById('solution').textContent = questions[currentQuestion].solution;
+  document.getElementById('output').innerHTML = '<span class="error-message">0 points awarded (solution viewed)</span>';
+}
+
+function runCode() {
+  const code = document.getElementById('code').value;
+  const input = document.getElementById('userInput').value;
+  const outputElement = document.getElementById('output');
+  
+  // Show loading state
+  outputElement.textContent = 'Executing code...';
+  
+  // In a real implementation, you would call your backend API here
+  // For this example, we'll simulate a response after a short delay
+  setTimeout(() => {
+    try {
+      // This is just a simulation - in a real app you'd call your API
+      const simulatedOutput = simulateCodeExecution(code, input);
+      
+      outputElement.innerHTML = simulatedOutput;
+      
+      if (!solutionViewed && !simulatedOutput.includes('Error')) {
+        score += 10;
+        document.getElementById('scoreValue').textContent = score;
+        outputElement.innerHTML += '\n<span class="success-message">🎉 10 points awarded!</span>';
+      }
+    } catch (error) {
+      outputElement.innerHTML = `<span class="error-message">Error: ${error.message}</span>`;
+    }
+  }, 800);
+}
+
+// This is just for simulation purposes - in a real app you'd call your backend
+function simulateCodeExecution(code, input) {
+  if (code.includes('error') || code.includes('Error')) {
+    throw new Error('Syntax error in code');
+  }
+  
+  // Simple simulation of different outputs
+  if (code.includes('a, b = b, a')) {
+    return 'Before swapping: a = 5, b = 10\nAfter swapping: a = 10, b = 5';
+  } else if (code.includes('n % 2 == 0')) {
+    return input ? (parseInt(input) % 2 === 0 ? 'Even' : 'Odd') : 'Even';
+  } else if (code.includes('range(1, 11)')) {
+    return '5 x 1 = 5\n5 x 2 = 10\n... up to 5 x 10 = 50';
+  } else if (code.includes('s[::2]')) {
+    return input ? input.split('').filter((_, i) => i % 2 === 0).join('') : 'Hlo ol!';
+  } else if (code.includes('i <= 5')) {
+    return '1\n4\n9\n16\n25';
+  } else if (code.includes('n < 0')) {
+    return input ? (parseInt(input) < 0 ? '0' : input) : '0';
+  } else if (code.includes('cats * 2')) {
+    return 'Total hats: 10';
+  } else if (code.includes('x > 0')) {
+    return input ? (parseInt(input) > 0 ? 'Positive' : 'Non-positive') : 'Positive';
+  } else if (code.includes('FizzBuzz')) {
+    return '1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz';
+  } else {
+    return 'Code executed successfully!\n(Note: This is a simulation. In a real app, actual code execution would occur server-side.)';
+  }
+}
+
+// Initialize with first question
+document.addEventListener('DOMContentLoaded', () => {
+  loadQuestion('q1');
+});
+</script>
+</body>
+</html>

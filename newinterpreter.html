@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Runner</title>
+  <style>
+    body { 
+      font-family: sans-serif; 
+      background: #f4f4f4; 
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    #editor { 
+      width: 100%; 
+      height: 300px; 
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      background: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border: 1px solid #444;
+      border-radius: 4px;
+      resize: vertical;
+    }
+    #output-box { 
+      background: #272822; 
+      color: #f8f8f2; 
+      padding: 1rem; 
+      margin-top: 1rem;
+      border-radius: 4px;
+      min-height: 100px;
+    }
+    #output-text { 
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+    #plot-img { 
+      margin-top: 20px; 
+      max-width: 100%; 
+      border: 2px solid #444; 
+      display: none;
+      background: white;
+      padding: 10px;
+    }
+    button { 
+      padding: 10px 20px; 
+      margin-top: 1rem;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
+    .error {
+      color: #ff5555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Python Interpreter</h1>
+
+  <div id="editor" contenteditable="true">import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
+
+plt.plot(x, y)
+plt.title('Sine Wave')
+plt.savefig('plot.png')</div>
+
+  <div class="button-group">
+    <button onclick="highlightCode()">Highlight Code</button>
+    <button onclick="runCode()">Run Code</button>
+  </div>
+
+  <div id="output-box">
+    <div id="output-text">Output will appear here...</div>
+    <img id="plot-img" src="" alt="Generated Plot">
+  </div>
+
+  <script>
+    async function highlightCode() {
+      const code = document.getElementById("editor").innerText;
+      
+      try {
+        const response = await fetch("http://localhost:5000/highlight", {
+          method: "POST",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: code })
+        });
+        
+        const data = await response.json();
+        document.getElementById("editor").innerHTML = data.highlighted_code;
+      } catch (error) {
+        console.error("Highlighting failed:", error);
+      }
+    }
+
+    async function runCode() {
+      const code = document.getElementById("editor").innerText;
+      const outputText = document.getElementById("output-text");
+      const img = document.getElementById("plot-img");
+      
+      outputText.textContent = "Running...";
+      outputText.className = "";
+      img.style.display = "none";
+
+      try {
+        const response = await fetch("http://localhost:5000/run", {
+          method: "POST",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: code })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+          outputText.textContent = data.error;
+          outputText.className = "error";
+        } else {
+          outputText.textContent = data.output || "Code executed successfully";
+          outputText.className = "";
+        }
+
+        if (data.plot) {
+          img.src = `http://localhost:5000/plot/${data.plot}`;
+          img.style.display = "block";
+        }
+      } catch (error) {
+        outputText.textContent = `Error: ${error.message}`;
+        outputText.className = "error";
+      }
+    }
+    let typingTimer;
+  const editor = document.getElementById("editor");
+
+  editor.addEventListener("input", () => {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => {
+      highlightCode();
+    }, 2000); // 2 seconds of no typing
+  });
+
+  async function highlightCode() {
+    const code = editor.innerText;
+    
+    try {
+      const response = await fetch("http://localhost:5000/highlight", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: code })
+      });
+
+      const data = await response.json();
+      editor.innerHTML = data.highlighted_code;
+    } catch (error) {
+      console.error("Highlighting failed:", error);
+    }
+  }
+
+  </script>
+</body>
+</html>

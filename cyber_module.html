@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python Learning Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --military-green: #206020;
+      --dark-green: #154015;
+      --navy-blue: #003366;
+      --airforce-blue: #2a4b6e;
+      --sky-blue: #4d8fc9;
+      --gold: #FFD700;
+      --gold-braid: #c9a53d;
+      --alert-red: #a30000;
+      --light-gray: #f0f0f0;
+      --khaki-light: #f0e6d2;
+      --dark-gray: #333333;
+      --combat-black: #1a1a1a;
+      --sidebar-width: 280px;
+      --header-height: 80px;
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body { 
+      font-family: 'Poppins', sans-serif; 
+      background: var(--light-gray); 
+      display: flex; 
+      height: 100vh; 
+      overflow: hidden; 
+      color: var(--dark-gray);
+    }
+    
+    nav { 
+      width: var(--sidebar-width); 
+      background: var(--dark-green); 
+      color: white; 
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .nav-header { 
+      padding: 1.5rem;
+      background: var(--military-green);
+      border-bottom: 2px solid var(--gold);
+    }
+    
+    .nav-header h2 { 
+      font-size: 1.5rem; 
+      margin-bottom: 0.5rem; 
+      text-align: center; 
+      color: white;
+    }
+    
+    .nav-header p {
+      font-size: 0.8rem;
+      text-align: center;
+      color: var(--khaki-light);
+      opacity: 0.8;
+    }
+    
+    .problem-list { 
+      flex: 1; 
+      overflow-y: auto; 
+      padding: 1rem 0;
+    }
+    
+    .problem-list ul { 
+      list-style: none; 
+    }
+    
+    .problem-list li { 
+      padding: 0.8rem 1.5rem; 
+      cursor: pointer; 
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+      display: flex;
+      align-items: center;
+    }
+    
+    .problem-list li:hover { 
+      background: rgba(255,255,255,0.1); 
+      border-left: 3px solid var(--gold);
+    }
+    
+    .problem-list li.active { 
+      background: rgba(0,0,0,0.2); 
+      border-left: 3px solid var(--gold);
+    }
+    
+    .problem-list li i { 
+      margin-right: 10px; 
+      color: var(--gold); 
+      width: 20px;
+      text-align: center;
+    }
+    
+    .problem-list li span { 
+      flex: 1; 
+    }
+    
+    .problem-list li .badge { 
+      background: var(--gold); 
+      color: var(--dark-green); 
+      padding: 2px 6px; 
+      border-radius: 10px; 
+      font-size: 0.7rem; 
+      font-weight: bold;
+    }
+    
+    .content { 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      height: 100vh; 
+      overflow: hidden;
+    }
+    
+    .header { 
+      height: var(--header-height); 
+      background: white; 
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 0 2rem; 
+      z-index: 5;
+    }
+    
+    .header h1 { 
+      color: var(--navy-blue); 
+      font-size: 1.5rem; 
+      font-weight: 600;
+    }
+    
+    .score-card { 
+      background: var(--navy-blue); 
+      color: white; 
+      padding: 0.5rem 1.2rem; 
+      border-radius: 30px; 
+      display: flex; 
+      align-items: center;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+    
+    .score-card i { 
+      color: var(--gold); 
+      margin-right: 8px; 
+      font-size: 1.2rem;
+    }
+    
+    .main-content { 
+      flex: 1; 
+      overflow-y: auto; 
+      padding: 2rem; 
+      display: flex; 
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .question-box { 
+      background: white; 
+      padding: 1.5rem; 
+      border-radius: 8px; 
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      border-top: 3px solid var(--navy-blue);
+    }
+    
+    .question-box h2 { 
+      color: var(--navy-blue); 
+      margin-bottom: 1rem; 
+      display: flex; 
+      align-items: center;
+    }
+    
+    .question-box h2 i { 
+      margin-right: 10px; 
+      color: var(--gold);
+    }
+    
+    .question-box p { 
+      line-height: 1.6; 
+      margin-bottom: 1.5rem;
+    }
+    
+   
+    
+    
+    
+    .code-editor { 
+      height: 600px;
+      min-height: 600px;
+      flex: 1; 
+      background: white; 
+      border-radius: 8px; 
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      display: flex; 
+      flex-direction: column;
+      border-top: 3px solid var(--military-green);
+    }
+    
+    .editor-header { 
+      padding: 1rem 1.5rem; 
+      background: var(--combat-black); 
+      color: white; 
+      border-radius: 8px 8px 0 0; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+    }
+    
+    .editor-header h3 { 
+      font-size: 1rem; 
+      display: flex; 
+      align-items: center;
+    }
+    
+    .editor-header h3 i { 
+      color: var(--gold); 
+      margin-right: 8px;
+    }
+    
+    .run-btn { 
+      background: var(--gold); 
+      color: var(--dark-green); 
+      border: none; 
+      padding: 0.5rem 1.2rem; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      font-weight: 600; 
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .run-btn i { 
+      margin-right: 8px;
+    }
+    
+    .run-btn:hover { 
+      background: var(--gold-braid); 
+      transform: translateY(-2px);
+    }
+    
+    textarea { 
+      flex: 1; 
+      padding: 1rem; 
+      font-family: 'Courier New', monospace; 
+      font-size: 0.95rem; 
+      border: none; 
+      resize: none; 
+      outline: none; 
+      background: var(--combat-black); 
+      color: #7fdb7f;
+      line-height: 1.5;
+    }
+    
+    .input-area { 
+      padding: 0.8rem 1rem; 
+      background: var(--dark-gray); 
+      border-radius: 0 0 8px 8px;
+    }
+    
+    .input-area label { 
+      display: block; 
+      color: white; 
+      margin-bottom: 0.5rem; 
+      font-size: 0.9rem;
+    }
+    
+    .input-area input { 
+      width: 100%; 
+      padding: 0.6rem; 
+      border-radius: 4px; 
+      border: none; 
+      font-family: 'Courier New', monospace;
+    }
+    
+    .output-container { 
+      height: 400px;
+      background: white; 
+      border-radius: 8px; 
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      border-top: 3px solid var(--sky-blue);
+    }
+    
+    .output-header { 
+      padding: 1rem 1.5rem; 
+      background: var(--airforce-blue); 
+      color: white; 
+      border-radius: 8px 8px 0 0; 
+      display: flex; 
+      align-items: center;
+    }
+    
+    .output-header h3 { 
+      font-size: 1rem; 
+      display: flex; 
+      align-items: center;
+    }
+    
+    .output-header h3 i { 
+      color: var(--gold); 
+      margin-right: 8px;
+    }
+    
+    #output { 
+      min-height: 120px; 
+      max-height: 200px; 
+      overflow-y: auto; 
+      padding: 1rem; 
+      background: var(--combat-black); 
+      color: #7fdb7f; 
+      font-family: 'Courier New', monospace; 
+      white-space: pre-wrap; 
+      border-radius: 0 0 8px 8px;
+      line-height: 1.5;
+    }
+    
+    .success-message {
+      color: var(--gold);
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+    
+    .error-message {
+      color: var(--alert-red);
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+    .description-btn {
+  background: var(--military-green);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.description-btn:hover {
+  background: var(--dark-green);
+  transform: translateY(-2px);
+}
+
+.description-btn i {
+  margin-right: 8px;
+}
+
+.description {
+  display: none;
+  padding: 1rem;
+  background-color: rgba(32, 96, 32, 0.1);
+  border-radius: 5px;
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 60%;
+  max-width: 600px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--alert-red);
+}
+    
+    @media (max-width: 768px) {
+      :root {
+        --sidebar-width: 240px;
+      }
+      
+      .header h1 {
+        font-size: 1.2rem;
+      }
+      
+      .main-content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-header">
+    <h2>Cybersecurity Tools</h2>
+  </div>
+  <div class="problem-list">
+    <ul id="topics">
+          <li onclick="loadQuestion('password_strength')" class="active">
+          <i class="fas fa-lock"></i>
+          <span>Password Strength Checker</span>
+          </li>
+          <li onclick="loadQuestion('password_manager')">
+            <i class="fas fa-key"></i>
+            <span>Password Manager</span>
+          </li>
+          <li onclick="loadQuestion('screen_monitoring')">
+            <i class="fas fa-eye"></i>
+            <span>Screen Monitoring</span>
+          </li>
+          <li onclick="loadQuestion('log_analyzer')">
+            <i class="fas fa-file-contract"></i>
+            <span>Log Analyzer</span>
+          </li>
+          <li onclick="loadQuestion('password_manager')">
+            <i class="fas fa-key"></i>
+            <span>Password Manager</span>
+          </li>
+          <li onclick="loadQuestion('password_manager')">
+            <i class="fas fa-key"></i>
+            <span>Password Manager</span>
+          </li>
+      
+    
+      
+    </ul>
+  </div>
+</nav>
+
+<div class="content">
+  <div class="header">
+    <h1>Python Coding Challenge</h1>
+    
+  </div>
+  
+  <div class="main-content">
+    <div id="questionArea" class="question-box">
+      <h2><i class="fas fa-question-circle"></i> Welcome to Python Training Camp</h2>
+      <p>Select a challenge from the sidebar to begin your Python training mission. Each completed challenge will earn you points towards your final score.</p>
+      <button class="description-btn" onclick="toggleDescription()">
+        <i class="fas fa-eye-slash"></i> View Description
+      </button>
+    </div>
+    
+    <div class="code-editor">
+      <div class="editor-header">
+        <h3><i class="fas fa-code"></i> Code Editor</h3>
+        <button class="run-btn" onclick="runCode()"><i class="fas fa-play"></i> Run Code</button>
+      </div>
+      <textarea id="code" placeholder="# Write your Python code here..."></textarea>
+      <div class="input-area">
+        <label for="userInput"><i class="fas fa-keyboard"></i> Input (if needed):</label>
+        <input id="userInput" type="text" placeholder="Enter input values separated by commas..." />
+      </div>
+    </div>
+    
+    <div class="output-container">
+      <div class="output-header">
+        <h3><i class="fas fa-terminal"></i> Output</h3>
+      </div>
+      <div id="output"># Your program output will appear here...</div>
+    </div>
+  </div>
+</div>
+<script>
+  const questions = {
+    password_strength: {
+    title: "Password Strength Checker",
+    description: `<h4>🔐 Password Strength Checker (Python Script)</h4>
+    <p>This Python script validates password strength against security criteria using regular expressions.</p>
+    
+    <h5>✨ What It Checks For:</h5>
+    <ul>
+      <li>✅ At least 8 characters long</li>
+      <li>✅ Contains uppercase letter</li>
+      <li>✅ Contains lowercase letter</li>
+      <li>✅ Includes at least one digit</li>
+      <li>✅ Has special character (!@#$%^&* etc.)</li>
+    </ul>
+    
+    <h5>🛠️ How It Works:</h5>
+    <p>Checks password against criteria and provides specific feedback about missing requirements.</p>
+    
+    <h5>🎯 Use Cases:</h5>
+    <ul>
+      <li>Login systems / sign-up forms</li>
+      <li>Teaching cybersecurity basics</li>
+      <li>Practicing regex and validation</li>
+    </ul>`,
+    code: `import re
+import math
+
+def password_strength(password):
+    
+    pool = 0
+    if re.search(r'[a-z]', password): pool += 26
+    if re.search(r'[A-Z]', password): pool += 26  
+    if re.search(r'\d', password): pool += 10
+    if re.search(r'[^a-zA-Z0-9]', password): pool += 32
+    
+    
+    entropy = math.log2(pool ** len(password))
+    
+   
+    weak_passwords = ["password", "123456", "qwerty", "letmein"]
+    if password.lower() in weak_passwords:
+        return "❌ Extremely weak (Common password)"
+    
+   
+    if entropy < 28: return "⚠️ Weak (easily brute-forced)"
+    elif entropy < 36: return "🟡 Moderate"
+    elif entropy < 60: return "✅ Strong"
+    else: return "🔒 Very strong (resistant to attacks)"
+
+print(password_strength(input("Enter password: ")))`,
+   
+  },
+  password_manager: {
+    title: "Password Manager",
+    description: `<h4>🔐 GUI-Based Encrypted Password Manager (with SQLite + Fernet Encryption)</h4>
+    <p>
+    This Python project is a <strong>secure, minimal, and user-friendly password manager</strong>, built with the power of 
+    <em>Tkinter</em> for its interface, <em>SQLite</em> for local storage, and <em>Fernet</em> (from the <code>cryptography</code> 
+    module) for AES-128 based symmetric encryption.
+  </p>
+
+  <h5>🛡️ Key Features:</h5>
+  <ul>
+    <li>🔐 <strong>Password Encryption:</strong> Every password is encrypted before being stored, using a unique Fernet key generated and saved in <code>secret.key</code>.</li>
+    <li>🧠 <strong>Memory-Safe Retrieval:</strong> Passwords can only be decrypted and viewed when requested through the interface using the matching email.</li>
+    <li>🧬 <strong>Strong Password Generator:</strong> Generates complex 16-character passwords using <code>secrets</code> and <code>string</code> modules for high entropy.</li>
+    <li>💾 <strong>Local Storage with SQLite:</strong> Stores service, email, username, and the encrypted password in a lightweight and persistent database.</li>
+    <li>⚙️ <strong>Error Handling & Alerts:</strong> Friendly <code>messagebox</code> popups guide the user, whether inputs are missing or data is retrieved successfully.</li>
+  </ul>
+
+  <h5>🌈 GUI Interface Highlights:</h5>
+  <ul>
+    <li>Clean, responsive window titled <strong>“🔐 Password Manager”</strong></li>
+    <li>Entry fields for service, email, username, and password</li>
+    <li>Three major buttons:
+      <ul>
+        <li>Store Password</li>
+        <li>Retrieve Password</li>
+        <li>Generate Password</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>💡 Use Cases:</h5>
+  <ul>
+    <li>Personal password vault on your system</li>
+    <li>Mini project for cybersecurity or Python portfolio</li>
+    <li>Learning tool for <strong>encryption, secure storage, GUI design</strong>, and <strong>safe coding practices</strong></li>
+  </ul>
+`,
+    code: `import tkinter as tk
+from tkinter import messagebox
+import sqlite3
+import secrets
+import string
+from cryptography.fernet import Fernet
+
+
+def generate_key():
+    key = Fernet.generate_key()
+    with open("secret.key", "wb") as key_file:
+        key_file.write(key)
+
+def load_key():
+    return open("secret.key", "rb").read()
+
+try:
+    key = load_key()
+except FileNotFoundError:
+    generate_key()
+    key = load_key()
+
+cipher = Fernet(key)
+
+conn = sqlite3.connect('password_manager.db')
+cursor = conn.cursor()
+cursor.execute('''CREATE TABLE IF NOT EXISTS passwords (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    service TEXT NOT NULL,
+    email TEXT NOT NULL,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL
+)''')
+conn.commit()
+conn.close()
+
+def encrypt_password(password):
+    return cipher.encrypt(password.encode()).decode()
+
+def decrypt_password(encrypted_password):
+    return cipher.decrypt(encrypted_password.encode()).decode()
+
+def store_password():
+    service = service_entry.get()
+    email = email_entry.get()
+    username = username_entry.get()
+    password = password_entry.get()
+
+    if not service or not email or not username or not password:
+        messagebox.showwarning("Error", "All fields are required!")
+        return
+
+    encrypted_pw = encrypt_password(password)
+    conn = sqlite3.connect('password_manager.db')
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO passwords (service, email, username, password) VALUES (?, ?, ?, ?)",
+                   (service, email, username, encrypted_pw))
+    conn.commit()
+    conn.close()
+    messagebox.showinfo("Success", "Password stored securely!")
+
+def get_password():
+    email = email_entry.get()
+    if not email:
+        messagebox.showwarning("Error", "Email field is required!")
+        return
+
+    conn = sqlite3.connect('password_manager.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT service, username, password FROM passwords WHERE email=?", (email,))
+    result = cursor.fetchone()
+    conn.close()
+
+    if result:
+        service, username, encrypted_pw = result
+        decrypted_pw = decrypt_password(encrypted_pw)
+        messagebox.showinfo("Retrieved", f"Service: {service}\nUsername: {username}\nPassword: {decrypted_pw}")
+    else:
+        messagebox.showwarning("Not Found", "No password found for this email.")
+
+def generate_password():
+    chars = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(secrets.choice(chars) for _ in range(16))
+    password_entry.delete(0, tk.END)
+    password_entry.insert(0, password)
+
+root = tk.Tk()
+root.title("🔐 Password Manager")
+root.geometry("700x600")
+
+tk.Label(root, text="Service:").grid(row=0, column=0, padx=10, pady=5)
+tk.Label(root, text="Email:").grid(row=1, column=0, padx=10, pady=5)
+tk.Label(root, text="Username:").grid(row=2, column=0, padx=10, pady=5)
+tk.Label(root, text="Password:").grid(row=3, column=0, padx=10, pady=5)
+
+service_entry = tk.Entry(root, width=30)
+service_entry.grid(row=0, column=1, padx=10, pady=5)
+email_entry = tk.Entry(root, width=30)
+email_entry.grid(row=1, column=1, padx=10, pady=5)
+username_entry = tk.Entry(root, width=30)
+username_entry.grid(row=2, column=1, padx=10, pady=5)
+password_entry = tk.Entry(root, width=30)
+password_entry.grid(row=3, column=1, padx=10, pady=5)
+
+tk.Button(root, text="Store Password", command=store_password).grid(row=4, column=0, columnspan=2, pady=10)
+tk.Button(root, text="Retrieve Password", command=get_password).grid(row=5, column=0, columnspan=2, pady=5)
+tk.Button(root, text="Generate Password", command=generate_password).grid(row=6, column=0, columnspan=2, pady=5)
+
+root.mainloop()
+`,
+    
+  }
+};
+
+// Global variable to track current question
+let currentQuestion = null;
+
+// Function to load questions
+function loadQuestion(key, event) {
+  // Prevent default behavior if it's a click event
+  if (event) event.preventDefault();
+  
+  currentQuestion = key;
+  const q = questions[key];
+  
+  // Update active state in nav
+  document.querySelectorAll('#topics li').forEach(li => {
+    li.classList.remove('active');
+  });
+  
+  // Add active class to clicked item
+  if (event) {
+    event.currentTarget.classList.add('active');
+  } else {
+    // Fallback if event isn't passed
+    document.querySelector(`#topics li[onclick*="${key}"]`).classList.add('active');
+  }
+  
+  // Update question area
+  document.getElementById('questionArea').innerHTML = `
+     <h2><i class="fas fa-question-circle"></i> ${q.title}</h2>
+    <button class="description-btn" onclick="showDescriptionModal()">
+      <i class="fas fa-info-circle"></i> View Description
+    </button>
+  `;
+  
+  document.getElementById('code').value = q.code;
+  document.getElementById('output').textContent = '# Your program output will appear here...';
+}
+
+// Function to show question description
+function showDescriptionModal() {
+  const dialog = document.getElementById('simpleDialog');
+  const content = document.getElementById('dialogContent');
+  const q = questions[currentQuestion];
+  
+  content.innerHTML = `<h3>${q.title}</h3><p>${q.description}</p>`;
+  dialog.style.display = 'block';
+}
+
+// Function to close modal
+function closeDialog() {
+  document.getElementById('simpleDialog').style.display = 'none';
+}
+
+// Function to run Python code
+function runCode() {
+  const code = document.getElementById("code").value;
+  const output = document.getElementById("output");
+  const loading = document.getElementById("loading");
+
+  // Show loading state
+  output.textContent = "Running...";
+  loading.style.display = "inline";
+
+  fetch("http://localhost:5000/run", {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code: code })
+  })
+  .then(res => res.json())
+  .then(data => {
+    output.textContent = data.output || data.error;
+    
+    const plotImg = document.getElementById("plot-img");
+    if (data.plot) {
+      plotImg.src = `http://localhost:5000/plot/${data.plot}?${Date.now()}`;
+      plotImg.style.display = "block";
+    } else {
+      plotImg.style.display = "none";
+    }
+  })
+  .catch(error => {
+    output.textContent = `Error: ${error.message}`;
+  })
+  .finally(() => {
+    loading.style.display = "none";
+  });
+}
+
+// Initialize the first question when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  // Load the first question by default
+  const firstQuestionKey = Object.keys(questions)[0];
+  loadQuestion(firstQuestionKey);
+  
+  // Set up code editor with line numbers
+  const codeElement = document.getElementById('code');
+  codeElement.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+      
+      // Insert tab character
+      this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+      
+      // Move cursor position
+      this.selectionStart = this.selectionEnd = start + 4;
+    }
+  });
+});
+
+
+
+
+
+
+</script>
+<div id="simpleDialog" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:20px;border-radius:8px;z-index:100;box-shadow:0 0 10px rgba(0,0,0,0.3);max-width:100%;">
+  <div id="dialogContent"></div>
+  <button onclick="document.getElementById('simpleDialog').style.display='none'" 
+          style="margin-top:15px;padding:5px 10px;background:var(--alert-red);color:white;border:none;border-radius:4px;cursor:pointer;">
+    Close
+  </button>
+</div>
+</body>
+</html>
