@@ -1,0 +1,64 @@
+<div style="font-family: 'Segoe UI', sans-serif; line-height: 1.6;">
+  <h2>🛠️ Windows System Audit Tool (Python)</h2>
+  <p>This tool is a simple Python script that acts like a digital X-ray for your Windows machine. It inspects key areas and generates a full report in a <code>windows_audit.txt</code> file. Great for cybersecurity learners to understand system introspection!</p>
+
+  <h3>🔍 What This Tool Does</h3>
+  <ul>
+    <li><strong>🖥️ System Info:</strong> OS version, architecture, machine type, etc.</li>
+    <li><strong>📦 Installed Programs:</strong> Lists installed apps from Windows registry</li>
+    <li><strong>🔄 Running Processes:</strong> Shows active processes with PID and names</li>
+    <li><strong>🛡️ System Services:</strong> Lists Windows services and their states</li>
+    <li><strong>📁 Output:</strong> Saves all data into <code>windows_audit.txt</code></li>
+  </ul>
+
+  <h3>🧱 Code Breakdown</h3>
+  <h4>1. Imports</h4>
+  <p>Uses libraries like <code>os</code>, <code>platform</code>, <code>psutil</code>, and <code>winreg</code> to fetch system-level info.</p>
+
+  <h4>2. get_system_info()</h4>
+  <p>Collects system basics like OS name, version, CPU type, architecture, and hostname.</p>
+
+  <h4>3. get_installed_programs()</h4>
+  <p>Reads the Windows Registry to find all installed programs by checking common registry paths.</p>
+
+  <h4>4. get_running_processes()</h4>
+  <p>Uses <code>psutil</code> to fetch currently running processes. Outputs PID and process name.</p>
+
+  <h4>5. get_services()</h4>
+  <p>Uses the <code>subprocess</code> module to execute <code>sc query</code> and list services and their states.</p>
+
+  <h4>6. write_to_file()</h4>
+  <p>Simple text file writer that stores the full audit report into a <code>.txt</code> file.</p>
+
+  <h4>7. main()</h4>
+  <p>This function orchestrates everything, calls the individual functions, stores their output in a list, and writes it all to a file.</p>
+
+  <h4>8. if __name__ == "__main__":</h4>
+  <p>Standard Python practice to run the <code>main()</code> only when the script is executed directly.</p>
+
+  <h3>💡 Teaching Value</h3>
+  <table border="1" cellpadding="8" style="border-collapse: collapse;">
+    <thead style="background-color: #f2f2f2;">
+      <tr><th>🔰 Topic</th><th>👨‍🏫 Teaching Value</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>System auditing</td><td>Teach system fingerprinting</td></tr>
+      <tr><td>Windows Registry</td><td>Explain where software info is stored</td></tr>
+      <tr><td>Process monitoring</td><td>Show how monitoring tools work</td></tr>
+      <tr><td>Python libraries</td><td>Real-world use of <code>psutil</code>, <code>subprocess</code>, <code>winreg</code></td></tr>
+      <tr><td>Forensics</td><td>Learn basics of investigation data collection</td></tr>
+    </tbody>
+  </table>
+
+  <h3>🧪 Extension Ideas</h3>
+  <ul>
+    <li>🔄 Add audit scheduling (every hour/day)</li>
+    <li>☁️ Upload results to a remote server</li>
+    <li>🖼️ Add GUI using Tkinter</li>
+    <li>📉 Include CPU/RAM usage per process</li>
+    <li>⚠️ Compare old and new audits to detect system changes</li>
+  </ul>
+
+  <h3>🧙 Final Thought</h3>
+  <p>This tool isn’t just a Python script—it’s your digital detective. It helps beginners explore the OS like a cyber Sherlock. Whether you’re teaching cybersecurity or learning it, this script is a perfect foundation for more advanced monitoring tools.</p>
+</div>
