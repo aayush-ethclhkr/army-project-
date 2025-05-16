@@ -1,0 +1,16 @@
+🔍 What does the Log Analyzer do?
+Opens a .log file chosen by the user.
+Reads each line and checks if it contains:
+ERROR ➜ Increases error count
+WARNING ➜ Increases warning count
+INFO ➜ Increases info count
+Searches for a keyword entered by the user (like "USB", "internet") and highlights matching lines.
+Displays all matching logs and shows a summary: total Errors, Warnings, and Info.
+🧰 Libraries Used
+All are built-in, no installation needed:
+
+tkinter – For GUI
+filedialog – For selecting the file
+messagebox – To show errors if something breaks
+re – For keyword matching (basic use here)
+datetime – For handling timestamps (if needed later)

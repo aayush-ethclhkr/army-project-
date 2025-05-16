@@ -1,0 +1,16 @@
+
+🖥️ Silent Screen Monitoring Tool (Python-Based)
+
+This script is a lightweight, silent screen capture utility written in Python. It automatically takes screenshots of your screen every minute and saves them in a neatly organized folder with a timestamped name for easy tracking.
+
+🔧 Key Features:
+
+Automated Screenshots: Captures your screen silently every 60 seconds.
+Organized Output: Saves each screenshot with a timestamped filename inside a uniquely named folder.
+Cross-Platform: Works on most platforms where Python and pyautogui are supported.
+Graceful Exit: Press Ctrl + C anytime to stop the monitoring process cleanly.
+📂 Use Cases:
+
+Parental or self-monitoring tool during study or work hours.
+Low-resource activity logger.
+Background screen tracking during software testing or presentations.
